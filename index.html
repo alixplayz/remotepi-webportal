@@ -32,7 +32,7 @@
             const deviceId = document.getElementById('deviceId').value;
             const password = document.getElementById('password').value;
             
-            mqttClient = mqtt.connect('wss://c15680f3.ala.eu-central-1.emqxsl.com:8084/mqtt', {
+            mqttClient = mqtt.connect('mqtt://192.168.10.123:1883', {
                 username: deviceId,
                 password: password,
                 clientId: 'web-' + Math.random().toString(16).substr(2, 8)
