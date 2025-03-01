@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>LED Control</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/mqtt@4.3.7/dist/mqtt.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+        input, button { padding: 10px; margin: 5px; font-size: 16px; }
+        button { background: #007bff; color: white; border: none; border-radius: 5px; }
+        button:active { background: #0056b3; }
+    </style>
+</head>
+<body>
+    <h1>Control Your LED</h1>
+    
+    <div>
+        <input type="text" id="deviceId" placeholder="Device ID">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="connect()">Connect</button>
+    </div>
+
+    <div id="controls" style="display:none;">
+        <button onclick="sendCommand('ON')">Turn On</button>
+        <button onclick="sendCommand('OFF')">Turn Off</button>
+    </div>
+
+    <script>
+        let mqttClient;
+
+        function connect() {
+            const deviceId = document.getElementById('deviceId').value;
+            const password = document.getElementById('password').value;
+            
+            mqttClient = mqtt.connect('wss://c15680f3.ala.eu-central-1.emqxsl.com:8084/mqtt', {
+                username: deviceId,
+                password: password,
+                clientId: 'web-' + Math.random().toString(16).substr(2, 8)
+            });
+
+            mqttClient.on('connect', () => {
+                alert("Connected to device!");
+                document.getElementById('controls').style.display = 'block';
+            });
+
+            mqttClient.on('error', (err) => {
+                alert("Connection failed: " + err.message);
+            });
+        }
+
+        function sendCommand(command) {
+            const deviceId = document.getElementById('deviceId').value;
+            mqttClient.publish(deviceId, command);
+            alert("Command sent: " + command);
+        }
+    </script>
+</body>
+</html>
