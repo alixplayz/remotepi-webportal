@@ -50,7 +50,7 @@
 
         function sendCommand(command) {
             const deviceId = document.getElementById('deviceId').value;
-            mqttClient.publish(deviceId, command);
+            mqttClient.publish(deviceId + "/control", command);
             alert("Command sent: " + command);
         }
     </script>
